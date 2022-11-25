@@ -313,7 +313,8 @@
 
 (defn rotate90
   [matrix]
-  (loop [ls matrix ret []]
+  (loop [ls matrix 
+         ret []]
     (if (empty? (first ls))
         ret
         (recur (map rest ls) (conj ret (reverse (map first ls)))))))
@@ -323,8 +324,8 @@
   (def cols (count (first matrix)))
   (def matrix-aux
     (loop [i 0 
-    			 ls matrix 
-    			 ret []]
+           ls matrix 
+           ret []]
       (if (empty? ls) 
           ret 
           (recur (+ i 1) 
@@ -493,8 +494,8 @@
 53503534226472524250874054075591789781264330331690")
 
 (defn p13
-	[ls]
-	(subs (str (apply + ls)) 0 10))
+  [ls]
+  (subs (str (apply + ls)) 0 10))
 
 (println (p13 (parse-enumerate-numbers-to-lines p13arg*)))
 
@@ -503,24 +504,24 @@
 ;longest collatz sequence
 
 (defn count-collatz-sequence
-	[start]
-	(loop [n start 
-				 count 1]
-		(cond
-			(= n 1) count
-			(even? n) (recur (/ n 2) (+ count 1))
-			:else (recur (+ (* 3 n) 1) (+ count 1))))) 
+  [start]
+  (loop [n start 
+         count 1]
+    (cond
+      (= n 1) count
+      (even? n) (recur (/ n 2) (+ count 1))
+      :else (recur (+ (* 3 n) 1) (+ count 1))))) 
 
 (defn p14
-	[limit]
-	(loop [i 1 
-				 max-count 0
-				 ret 0]
-		(if (= i limit) 
-				ret
-				(let [count (count-collatz-sequence i)]
-					(if (< max-count count)
-							(recur (+ i 1) count i)
-							(recur (+ i 1) max-count ret))))))
+  [limit]
+  (loop [i 1 
+         max-count 0
+         ret 0]
+    (if (= i limit)
+        ret
+        (let [count (count-collatz-sequence i)]
+          (if (< max-count count)
+              (recur (+ i 1) count i)
+              (recur (+ i 1) max-count ret))))))
 
 (println (p14 1000000))
