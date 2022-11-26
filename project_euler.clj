@@ -619,3 +619,80 @@
 
 (println (p17 1 5))
 (println (p17 1 1000))
+
+
+;p18
+;maximum path sum 1
+
+(def  p18arg*
+"75
+95 64
+17 47 82
+18 35 87 10
+20 04 82 47 65
+19 01 23 75 03 34
+88 02 77 73 07 63 67
+99 65 04 28 06 16 70 92
+41 41 26 56 83 40 80 70 33
+41 48 72 33 47 32 37 16 94 29
+53 71 44 65 25 43 91 52 97 51 14
+70 11 33 28 77 73 17 78 39 68 17 57
+91 71 52 38 17 14 91 43 58 50 27 29 48
+63 66 04 68 89 53 67 30 73 16 69 87 40 31
+04 62 98 27 23 09 70 98 73 93 38 53 60 04 23")
+
+(defn p18
+  [triangle]
+  (defn aux
+    [depth i]
+    (let [x (nth (nth triangle depth) i)]
+    (if (= depth (- (count triangle) 1))
+        x
+        (max (+ x (aux (+ depth 1) i)) 
+             (+ x (aux (+ depth 1) (+ i 1)))))))
+   (aux 0 0))
+
+(println (p18 (parse-enumerate-numbers-with-space-to-matrix p18arg*)))
+
+
+;p19
+;counting sundays
+
+(defn leapyear?
+  [y]
+  (cond
+    (zero? (mod y 400)) true
+    (zero? (mod y 100)) false
+    (zero? (mod y 4)) true
+    :else false))
+
+(defn get-month-days
+  [y m]
+  (cond
+    (or (= m 4) (= m 6) (= m 9) (= m 11)) 30
+    (= m 2) (if (leapyear? y) 29 28)
+    :else 31))
+
+;月の最終日の曜日取得(Sun: 1 Mon: 2 ... Sat: 7)
+(defn get-day-of-week-first-day-of-next-month
+  [day-of-week-first-day-of-month y m]
+  (mod (+ day-of-week-first-day-of-month 
+          (get-month-days y m) 1)
+        7))
+
+;期間内の月の初日が日曜日(Sun: 1)となる回数をカウント
+(defn p19
+  [day-of-week-start-day ys ms ye me]
+  (loop [dow day-of-week-start-day
+         y ys
+         m ms
+         ret 0]
+    (if (or (> y ye) (and (= y ye) (> m me)))
+        ret 
+        (recur (get-day-of-week-first-day-of-next-month dow y m)
+               (if (= m 12) (+ y 1) y)
+               (if (= m 12) 1 (+ m 1))
+               (if (= dow 1) (+ ret 1) ret)))))
+
+(println (- (p19 2 1900 1 2000 12) (p19 2 1900 1 1900 12)))
+
