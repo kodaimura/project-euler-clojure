@@ -696,3 +696,45 @@
 
 (println (- (p19 2 1900 1 2000 12) (p19 2 1900 1 1900 12)))
 
+
+;p20
+;factorial digit sum
+
+(defn factorial
+  [n]
+  (if (= n 1) 1M (* n (factorial (- n 1)))))
+
+(defn p20
+  [n]
+  (apply + (number-to-digits (factorial n))))
+
+(println (p20 100))
+
+
+;p21
+;amicable numbers
+
+(defn divisors-except-self
+  [n]
+  (loop [i 2
+         ret [1]]
+    (cond
+      (< n (* i i)) ret
+      (zero? (mod n i)) (recur (+ i 1) (concat ret (list i (/ n i))))
+      :else (recur (+ i 1) ret))))
+
+(defn amicable-number?
+  [n]
+  (let [b (apply + (divisors-except-self n))
+        a (apply + (divisors-except-self b))] 
+    (and (= a n) (not (= a b)))))
+
+(defn p21
+  [n]
+  (loop [i 1 ret 0]
+    (cond
+      (= i n) ret
+      (amicable-number? i) (recur (+ i 1) (+ ret i))
+      :else (recur (+ i 1) ret))))
+
+(println (p21 10000))
