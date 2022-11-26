@@ -1,6 +1,7 @@
 (ns project.euler
   (:require
-    [clojure.string :as string]))
+    [clojure.string :as string]
+    [clojure.math :as math]))
 
 (defn parse-int
   [s]
@@ -351,7 +352,7 @@
   (if (< len n)
       (apply * ls)
       (loop [i 0 ret 0]
-        (if (= (+ i n) len) 
+        (if (> (+ i n) len) 
             ret
             (recur (+ i 1) (max ret (multiply-range ls i (- (+ i n) 1))))))))
 
@@ -525,3 +526,96 @@
               (recur (+ i 1) max-count ret))))))
 
 (println (p14 1000000))
+
+
+;p15
+;lattice paths
+
+;long overflow
+;(defn multiplication
+;  [n m]
+;  (loop [i n ret 1]
+;    (if (> i m) ret (recur (+ i 1) (* ret i)))))
+
+;long overflow
+;(defn multiplication
+;  [n m]
+;  (apply * (range n (+ m 1))))
+
+(defn multiplication
+  [n m]
+  (loop [i n ret 1M]  ;(bigdec 1) でもok
+    (if (> i m) ret (recur (+ i 1) (* ret i)))))
+
+(defn multiplication-v2
+  [n m]
+  (apply *' (range n (+ m 1))))
+
+
+(defn combination
+  [m n]
+  (/ (multiplication (+ (- m n) 1) m)
+     (multiplication 1 n)))
+
+(println (combination 40 20))
+
+
+;p16
+;power digit sum
+
+(defn number-to-digits
+  [x]
+  (map #(Integer/parseInt %) (string/split (str x) #"")))
+
+(defn sum-of-digit
+  [x]
+  (apply + (number-to-digits x)))
+
+(defn pow
+  [x n]
+  (loop [i 1 ret (bigdec x)]
+    (if (= i n) ret (recur (+ i 1) (* ret x)))))
+
+(defn p16
+  [x n]
+  (sum-of-digit (bigint (pow x n))))
+
+(println (p16 2 15))
+(println (p16 2 1000))
+
+
+;p17
+;number letter counts
+
+(def num-en-map
+  {1 "one", 2 "two", 3 "three", 4 "four", 5 "five", 6 "six",
+  7 "seven", 8 "eight", 9 "nine", 10 "ten", 11 "eleven",
+  12 "twelve", 13 "thirteen", 14 "fourteen", 15 "fifteen",
+  16 "sixteen", 17 "seventeen", 18 "eighteen", 19 "nineteen",
+  20 "twenty", 30 "thirty", 40 "forty", 50 "fifty", 60 "sixty",
+  70 "seventy", 80 "eighty", 90 "ninety", 1000 "onethousand"})
+
+;1000より大きい数は想定しない
+(defn number-to-english
+  [x]
+  (loop [n x ret "" aux ""]
+    (cond
+      (= n 0) ret
+      (num-en-map n) (str ret aux (num-en-map n)) 
+      (<= 100 n) (recur (mod n 100) (str ret (num-en-map (int (/ n 100))) "hundred") "and")
+      (<= 20 n) (recur (mod n 10) (str ret aux (num-en-map (* (int (/ n 10)) 10))) "")
+      :else (println "error"))))
+
+(println (number-to-english 23))
+(println (number-to-english 342))
+(println (number-to-english 111))
+
+(defn p17
+  [n m]
+  (loop [i n ret 0]
+    (if (> i m)
+        ret
+        (recur (+ i 1) (+ ret (count (number-to-english i)))))))
+
+(println (p17 1 5))
+(println (p17 1 1000))
