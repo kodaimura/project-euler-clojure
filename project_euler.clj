@@ -139,18 +139,18 @@
   (let [s (str x)]
     (= s (apply str (reverse s)))))
 
-(defn max-number-of-n-digit
+(defn max-number-of-digit
   [n]
   (Integer/parseInt (apply str (replicate n "9"))))
   
-(defn min-number-of-n-digit
+(defn min-number-of-digit
   [n]
   (Integer/parseInt (apply str (cons "1" (replicate (- n 1) "0")))))
 
 (defn p4
   [digit]
-  (let [start (min-number-of-n-digit digit)
-        end (max-number-of-n-digit digit)]
+  (let [start (min-number-of-digit digit)
+        end (max-number-of-digit digit)]
     (loop [a start
            b start
            result 0]
@@ -582,18 +582,18 @@
 ;; Power digit sum
 ;; 2^1000 の全ての桁の数字の和
 
-(defn number-to-digits
+(defn number-to-list
   [x]
   (map #(Integer/parseInt %) (string/split (str x) #"")))
 
 (defn sum-of-digit
   [x]
-  (apply + (number-to-digits x)))
+  (apply + (number-to-list x)))
 
 (defn pow
   [x n]
   (loop [i 1 ret (bigdec x)]
-    (if (= i n) ret (recur (+ i 1) (* ret x)))))
+    		(if (= i n) ret (recur (+ i 1) (* ret x)))))
 
 (defn p16
   [x n]
@@ -733,7 +733,7 @@
 
 (defn p20
   [n]
-  (apply + (number-to-digits (factorial n))))
+  (apply + (number-to-list (factorial n))))
 
 (println (p20 100))
 
@@ -951,3 +951,56 @@
         :else (recur nn layer (+ c 1) (+ ret nn))))))
 
 (println (p28))
+
+
+;; p29
+;; Distinct powers
+;; 2 <= a <= 100 および 2 <= b <= 100 に対してa^b で生成される値で
+;; 異なる項はいくつあるか
+
+(defn p29
+  []
+  (loop [a 2 b 2 ls []]
+    (cond
+      (and (= a 100) (= b 100)) (count (set (cons (pow a b) ls)))
+      (= b 100) (recur (+ a 1) 2 (cons (pow a b) ls))
+      :else (recur a (+ b 1) (cons (pow a b) ls)))))
+
+(println (p29))
+
+
+;; p30
+;; Digit fifth powers
+;; 1634 = 1^4 + 6^4 + 3^4 + 4^4
+;; 8208 = 8^4 + 2^4 + 0^4 + 8^4
+;; 9474 = 9^4 + 4^4 + 7^4 + 4^4 
+;; 5桁で成り立つもの全ての数の和
+
+(defn sum-of-powers-of-digits
+  [x n]
+  (apply + (map (fn [i] (int (pow i n)))
+  							(number-to-list x))))
+
+(defn get-p30-limit
+	[digit]
+	(loop [i 1 ret 0]
+		(let [x (* i (int (pow 9 digit)))] 
+			(cond
+				(and (not (= (count (str x)) i)) (not (= ret 0))) ret
+				(= (count (str x)) i) (recur (+ i 1) x)
+				:else (recur (+ i 1) ret)))))
+
+(println (get-p30-limit 4))
+(println (get-p30-limit 5))
+
+(defn p30
+  [digit]
+  (def limit (get-p30-limit digit))
+  (loop [i 2 ret 0]
+    (cond
+      (= i limit) ret
+      (= i (sum-of-powers-of-digits i digit)) (recur (+ i 1) (+ ret i))
+      :else (recur (+ i 1) ret))))
+
+(println (p30 4))
+(println (p30 5))
