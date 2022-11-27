@@ -720,6 +720,7 @@
          ret [1]]
     (cond
       (< n (* i i)) ret
+      (= n (* i i)) (conj ret i)
       (zero? (mod n i)) (recur (+ i 1) (concat ret (list i (/ n i))))
       :else (recur (+ i 1) ret))))
 
@@ -761,3 +762,89 @@
                (+ ret (name-score (+ i 1) (string/replace (nth names i) #"\"" "")))))))
 
 (println (p22 (sort (string/split p22arg* #","))))
+
+
+;p23
+;non-abundant sums
+
+(defn abundant-number?
+  [n]
+  (< n (apply + (divisors-except-self n))))
+
+(defn abundant-numbers
+  [limit]
+  (loop [i 1
+         ret []]
+    (cond 
+      (< limit i) ret
+      (abundant-number? i) (recur (+ i 1) (conj ret i))
+      :else (recur (+ i 1) ret))))
+
+(defn abundant-sums-exists?
+  [n abundants]
+  (loop [ls abundants]
+    (cond 
+      (< n (* 2 (first ls))) false
+      (abundant-number? (- n (first ls))) true
+      :else (recur (rest ls)))))
+
+(defn p23 
+  [limit]
+  (def abundants (abundant-numbers limit))
+  (loop [i 1
+         ret 0]
+    (cond
+      (> i limit) ret
+      (abundant-sums-exists? i abundants) (recur (+ i 1) ret)
+      :else (recur (+ i 1) (+ ret i)))))
+
+;(println (p23 28123))
+
+
+;p24
+;lexicographic permutations
+
+(defn drop-index
+  [ls index]
+  (concat (take index ls) (drop (+ index 1) ls)))
+
+(defn drop-item
+  [ls item]
+  (drop-index ls (.indexOf ls item)))
+
+(defn permutations
+  [ls]
+  (loop [l ls ret []]
+    (cond 
+      (empty? ls) [[]]
+      (empty? l) ret
+      :else (recur (rest l) 
+                   (concat ret 
+                          (map (fn [x] (cons (first l) x)) 
+                               (permutations (drop-item ls (first l)))))))))
+
+(defn p24
+  [ls i]
+  (nth (sort (map (fn [l] (apply str l)) 
+                  (permutations ls)))
+       (- i 1)))
+
+(println (p24 [0 1 2 3 4 5 6 7 8 9] 1000000))
+
+
+;p25
+;1000-digit fibonacci number
+
+(defn digit
+  [n]
+  (count (str n)))
+
+(defn p25 []
+  (loop [a 1M
+         b 1M
+         i 2]
+    (if (= (digit b) 1000)
+        i
+        (recur b (+ a b) (+ i 1)))))
+
+(println (p25))
