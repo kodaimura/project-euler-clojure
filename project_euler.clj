@@ -62,7 +62,7 @@
 
 (println (p1 999))
 
-(defn sum-multiples-of-3or5-v2
+(defn p1-v2
   [n]
   (apply + (filter (fn [n] (or (multiples? n 3) (multiples? n 5)))
                    (range 1 n))))
@@ -882,3 +882,72 @@
 
 (println (p25))
 
+
+;; p26
+;; Reciprocal cycles
+;; d < 1000 において 1/d の循環小数の桁が最も大きいd
+
+;(recurring-cycle 1 7) ->[1 4 2 8 5 7]
+(defn recurring-cycle
+  [n d]
+  (loop [n n 
+         d d 
+         mods [] 
+         quos []]
+    (let [mo (mod n d)]
+      (if (.contains mods mo)
+          (drop (+ 1 (.indexOf mods mo)) (conj quos (quot n d)))
+          (recur (* 10 mo) d (conj mods mo) (conj quos (quot n d)))))))
+
+(println (recurring-cycle 1 7))
+
+(defn p26
+  [limit]
+  (loop [i 1 ret 0]
+    (if (< limit i)
+        ret
+        (recur (+ i 1) (max ret (count (recurring-cycle 1 i)))))))
+
+(println (p26 1000))
+
+
+;; p27
+;; Quadratic primes
+;; n^2+an+b において最も多くの素数を生成するab
+;; ただし |a| < 1000 かつ |b| <= 1000
+
+(defn p27 []
+  (loop [a -999 
+         b -1000
+         n 0
+         max-n 0
+         ret 0]
+    (cond
+      (and (= a 999) (= b 1000)) ret
+      (= b 1000) (recur (+ a 1) -1000 0 max-n ret)
+      (prime? (+ (* n n) (* n a) b)) (recur a b (+ n 1) max-n ret)
+      (< max-n n) (recur a (+ b 1) 0 n (* a b))
+      :else (recur a (+ b 1) 0 max-n ret))))
+
+(println (p27))
+
+
+;; p28
+;; Number spiral diagonals
+;; 真ん中を1として渦巻状に整数を並べた1001×1001の正方形の対角線を結ぶ数字の和
+;; 7 8 9
+;; 6 1 2
+;; 5 4 3
+
+(defn p28 []
+  (loop [n 1 
+         layer 1
+         c 1
+         ret 1]
+    (let [nn (+ n (* layer 2))]
+      (cond
+        (and (= (+ 1 (* layer 2)) 1001) (= c 4)) (+ ret nn)
+        (= c 4) (recur nn (+ layer 1) 1 (+ ret nn))
+        :else (recur nn layer (+ c 1) (+ ret nn))))))
+
+(println (p28))
