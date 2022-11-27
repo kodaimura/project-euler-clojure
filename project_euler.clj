@@ -44,8 +44,9 @@
   (map bigdec (divide-into-lines block)))
 
 
-;p1
-;multiples of 3 or 5
+;; p1
+;; Multiples of 3 or 5
+;; 1000未満の3または5の倍数の和
 
 (defn multiples?
   [n a]
@@ -61,7 +62,7 @@
 
 (println (p1 999))
 
-(defn p1-v2
+(defn sum-multiples-of-3or5-v2
   [n]
   (apply + (filter (fn [n] (or (multiples? n 3) (multiples? n 5)))
                    (range 1 n))))
@@ -69,8 +70,9 @@
 (println (p1-v2 1000))
 
 
-;p2
-;even fibonacci numbers
+;; p2
+;; Even Fibonacci numbers
+;; 400万を超えないフィボナッチ数列の偶数項の和
 
 (defn fibonacci
   [s1 s2 limit]
@@ -89,8 +91,9 @@
 (println (p2 1 2 4000000))
 
 
-;p3
-;largest prime factor
+;; p3
+;; Largest prime factor
+;; 最大の素数の約数
 
 (defn prime?
   [x]
@@ -127,8 +130,9 @@
 (println (p3 600851475143))
 
 
-;p4
-;largest palindrome product
+;; p4
+;; Largest palindrome product
+;; 2つの3桁の数の積から作られる最大の回文数
 
 (defn palindrome-number?
   [x]
@@ -162,8 +166,9 @@
 (println (p4 3))
 
 
-;p5
-;smallest multiple
+;; p5
+;; Smallest Multiple
+;; 1から20までのすべての数で割り切れる最小の正数
 
 (defn divisible-by-from-n-to-m?
   [x n m]
@@ -180,8 +185,9 @@
 ;(println (p5 1 20))
 
 
-;p6
-;sum square difference
+;; p6
+;; Sum square difference
+;; 1から100までの整数の2乗和と和の2乗の差
 
 (defn square [x] (* x x))
 
@@ -200,8 +206,9 @@
 (println (p6 100))
 
 
-;p7
-;10001st prime
+;; p7
+;; 10001st Prime
+;; 10001番目の素数
 
 (defn nth-prime
   [n]
@@ -212,8 +219,9 @@
 (println (nth-prime 10001))
 
 
-;p8
-;largest product in a series
+;; p8
+;; Largest product in a series
+;; 隣接する13桁の数字の積で最大の値
 
 (def p8arg*
  "96983520312774506326239578318016984801869478851843
@@ -256,8 +264,9 @@
 (println (p8 (parse-enumerate-numbers-to-list p8arg*) 13))
 
 
-;p9
-;special pythagorean triplet
+;; p9
+;; Special Pythagorean triplet
+;; a < b < c | a^2 + b^2 = c^2 | a + b + c = 1000 を満たす abcの値
 
 (defn p9
   [x]
@@ -272,8 +281,9 @@
 (println (p9 1000))
 
 
-;p10
-;summation of primes
+;; p10
+;; Summation of primes
+;; 2000000未満の素数の和
 
 (defn sum-of-primes-below
   [n]
@@ -287,8 +297,9 @@
 (println (sum-of-primes-below 2000000))
 
 
-;p11
-;largest product in a grid
+;; p11
+;; Largest product in a grid
+;; 縦、横、斜めの連続する4数の積で最大の値
 
 (def p11arg*
  "08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08
@@ -366,8 +377,10 @@
 (println (p11 (parse-enumerate-numbers-with-space-to-matrix p11arg*) 4))
 
 
-;p12
-;highly divisible triangular number
+;; p12
+;; Highly divisible triangular number
+;; 三角数 1, 3, 6, 10, 15, 21, 28, 36, 45, 55, ...
+;; 約数の数が500を超える最初の三角数
 
 (defn count-divisors
   [n]
@@ -389,8 +402,9 @@
 (println (p12 500))
 
 
-;p13
-;large sum
+;; p13
+;; Large sum
+;; 下記の全ての50桁の数の和の先頭10桁
 
 (def p13arg* 
  "37107287533902102798797998220837590246510135740250
@@ -501,8 +515,11 @@
 (println (p13 (parse-enumerate-numbers-to-lines p13arg*)))
 
 
-;p14
-;longest collatz sequence
+;; p14
+;; Longest collatz sequence
+;; 偶数: n/2   奇数: 3n+1
+;; 上記のルールで1になるまで繰り返した時に、
+;; 100万未満の開始数で、最も長いチェーンを生成する数字
 
 (defn count-collatz-sequence
   [start]
@@ -528,8 +545,9 @@
 (println (p14 1000000))
 
 
-;p15
-;lattice paths
+;; p15
+;; Lattice paths
+;; 20×20 のグリッドで左上から右下に行くルートがいくつあるか。
 
 ;long overflow
 ;(defn multiplication
@@ -560,8 +578,9 @@
 (println (combination 40 20))
 
 
-;p16
-;power digit sum
+;; p16
+;; Power digit sum
+;; 2^1000 の全ての桁の数字の和
 
 (defn number-to-digits
   [x]
@@ -584,8 +603,9 @@
 (println (p16 2 1000))
 
 
-;p17
-;number letter counts
+;; p17
+;; Number letter counts
+;; 1から1000までの数字を英語にしたときの合計の文字数
 
 (def num-en-map
   {1 "one", 2 "two", 3 "three", 4 "four", 5 "five", 6 "six",
@@ -621,8 +641,9 @@
 (println (p17 1 1000))
 
 
-;p18
-;maximum path sum 1
+;; p18
+;; Maximum path sum 1
+;; 上から下までの数字の合計が最大になるルート
 
 (def  p18arg*
 "75
@@ -655,8 +676,13 @@
 (println (p18 (parse-enumerate-numbers-with-space-to-matrix p18arg*)))
 
 
-;p19
-;counting sundays
+;; p19
+;; Counting Sundays
+;; 1900/1/1 Monday
+;; 4の倍数閏年
+;; 100の倍数閏年ではない
+;; 400の倍数閏年
+;; 1901/1/1から2000/12/31の間で、月の初日が日曜日となる日数
 
 (defn leapyear?
   [y]
@@ -697,8 +723,9 @@
 (println (- (p19 2 1900 1 2000 12) (p19 2 1900 1 1900 12)))
 
 
-;p20
-;factorial digit sum
+;; p20
+;; Factorial digit sum
+;; 100!の全ての桁の数字の合計
 
 (defn factorial
   [n]
@@ -711,8 +738,11 @@
 (println (p20 100))
 
 
-;p21
-;amicable numbers
+;; p21
+;; Amicable numbers
+;; 220 の約数1, 2, 4, 5, 10, 11, 20, 22, 44, 55, 110 -> 合計284
+;; 284 の約数1, 2, 4, 71, 142 -> 合計220
+;; 上のような d(a)=b d(b)=a a!=b を満たす10000以下の数字の合計 
 
 (defn divisors-except-self
   [n]
@@ -741,8 +771,11 @@
 (println (p21 10000))
 
 
-;p22
-;names scores
+;; p22
+;; Names scores
+;; COLINE -> 3+15+12+9+14 = 53   辞書順で938番目
+;; COLINE のスコアが53*938 = 49714 と計算される時の
+;; ファイル内の全ての文字列の合計スコア
 
 (def p22arg*
   (slurp "p022_names.txt"))
@@ -764,8 +797,8 @@
 (println (p22 (sort (string/split p22arg* #","))))
 
 
-;p23
-;non-abundant sums
+;; p23
+;; Non-abundant sums
 
 (defn abundant-number?
   [n]
@@ -801,8 +834,8 @@
 ;(println (p23 28123))
 
 
-;p24
-;lexicographic permutations
+;; p24
+;; Lexicographic permutations
 
 (defn drop-index
   [ls index]
@@ -829,11 +862,11 @@
                   (permutations ls)))
        (- i 1)))
 
-(println (p24 [0 1 2 3 4 5 6 7 8 9] 1000000))
+;(println (p24 [0 1 2 3 4 5 6 7 8 9] 1000000))
 
 
-;p25
-;1000-digit fibonacci number
+;; p25
+;; 1000-digit fibonacci number
 
 (defn digit
   [n]
@@ -848,3 +881,4 @@
         (recur b (+ a b) (+ i 1)))))
 
 (println (p25))
+
