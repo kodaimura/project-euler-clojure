@@ -738,3 +738,26 @@
       :else (recur (+ i 1) ret))))
 
 (println (p21 10000))
+
+
+;p22
+;names scores
+
+(def p22arg*
+  (slurp "p022_names.txt"))
+
+(defn name-score
+  [n name]
+  (* n (apply + (map (fn [c] (- (int c) 64)) 
+                     (seq name)))))
+
+(defn p22
+  [names]
+  (def len (count names))
+  (loop [i 0 ret 0]
+    (if (= i len)
+        ret
+        (recur (+ i 1) 
+               (+ ret (name-score (+ i 1) (string/replace (nth names i) #"\"" "")))))))
+
+(println (p22 (sort (string/split p22arg* #","))))
