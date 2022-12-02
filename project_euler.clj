@@ -1004,3 +1004,23 @@
 
 (println (p30 4))
 (println (p30 5))
+
+
+;; p31
+;; Coin sums
+;; 1,2,5,10,20,50,100 の組み合わせで200になる通り 
+
+(defn p31
+  [ls x]
+  (defn aux
+    [ls sum]
+    (cond
+      (= sum x) 1
+      (< x sum) 0
+      (empty? ls) 0
+      (and (= 1 (count ls)) (zero? (mod (- x sum) (first ls)))) 1
+      :else (+ (aux ls (+ sum (first ls)))
+               (aux (rest ls) sum))))
+  (aux (sort > ls) 0))
+
+(println (p31 [1 2 5 10 20 50 100 200] 200)) 
