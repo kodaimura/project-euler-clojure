@@ -18,28 +18,28 @@
   (string/split block #"\n"))
 
 ;複数行の数字の並びを一次元リストに変換する
-(defn parse-enumerate-numbers-to-list
+(defn parse-enumerate-numbers->list
   [block]
   (filter (fn [x] (not (nil? x)))
           (map parse-int 
                (map str (seq block)))))
 
 ;複数行の数字の並びを二次元リストに変換する
-(defn parse-enumerate-numbers-to-matrix
+(defn parse-enumerate-numbers->matrix
   [block]
   (map map-parse-int
        (map (fn [line] (string/split line #""))
             (divide-into-lines block))))
 
 ;複数行の数字の並び(数字間スペースあり)を二次元リストに変換する
-(defn parse-enumerate-numbers-with-space-to-matrix
+(defn parse-enumerate-numbers-with-space->matrix
   [block]
   (map map-parse-int
        (map (fn [line] (string/split line #" "))
             (divide-into-lines block))))
 
 ;複数行の数字の並びを一行を一つの数値として一次元リストに変換する
-(defn parse-enumerate-numbers-to-lines
+(defn parse-enumerate-numbers->lines
   [block]
   (map bigdec (divide-into-lines block)))
 
@@ -261,7 +261,7 @@
         ret
         (recur (+ i 1) (max ret (multiply-range ls i (- (+ i x) 1)))))))
 
-(println (p8 (parse-enumerate-numbers-to-list p8arg*) 13))
+(println (p8 (parse-enumerate-numbers->list p8arg*) 13))
 
 
 ;; p9
@@ -374,7 +374,7 @@
                      (map (fn [ls] (max-product-series ls n)) (rotate90 matrix))
                      (map (fn [ls] (max-product-series ls n)) (rotate135 matrix)))))
 
-(println (p11 (parse-enumerate-numbers-with-space-to-matrix p11arg*) 4))
+(println (p11 (parse-enumerate-numbers-with-space->matrix p11arg*) 4))
 
 
 ;; p12
@@ -512,7 +512,7 @@
   [ls]
   (subs (str (apply + ls)) 0 10))
 
-(println (p13 (parse-enumerate-numbers-to-lines p13arg*)))
+(println (p13 (parse-enumerate-numbers->lines p13arg*)))
 
 
 ;; p14
@@ -582,13 +582,13 @@
 ;; Power digit sum
 ;; 2^1000 の全ての桁の数字の和
 
-(defn number-to-list
+(defn number->list
   [x]
   (map #(Integer/parseInt %) (string/split (str x) #"")))
 
 (defn sum-of-digit
   [x]
-  (apply + (number-to-list x)))
+  (apply + (number->list x)))
 
 (defn pow
   [x n]
@@ -616,7 +616,7 @@
   70 "seventy", 80 "eighty", 90 "ninety", 1000 "onethousand"})
 
 ;1000より大きい数は想定しない
-(defn number-to-english
+(defn number->english
   [x]
   (loop [n x ret "" aux ""]
     (cond
@@ -626,16 +626,16 @@
       (<= 20 n) (recur (mod n 10) (str ret aux (num-en-map (* (int (/ n 10)) 10))) "")
       :else (println "error"))))
 
-(println (number-to-english 23))
-(println (number-to-english 342))
-(println (number-to-english 111))
+(println (number->english 23))
+(println (number->english 342))
+(println (number->english 111))
 
 (defn p17
   [n m]
   (loop [i n ret 0]
     (if (> i m)
         ret
-        (recur (+ i 1) (+ ret (count (number-to-english i)))))))
+        (recur (+ i 1) (+ ret (count (number->english i)))))))
 
 (println (p17 1 5))
 (println (p17 1 1000))
@@ -673,7 +673,7 @@
              (+ x (aux (+ depth 1) (+ i 1)))))))
    (aux 0 0))
 
-(println (p18 (parse-enumerate-numbers-with-space-to-matrix p18arg*)))
+(println (p18 (parse-enumerate-numbers-with-space->matrix p18arg*)))
 
 
 ;; p19
@@ -733,7 +733,7 @@
 
 (defn p20
   [n]
-  (apply + (number-to-list (factorial n))))
+  (apply + (number->list (factorial n))))
 
 (println (p20 100))
 
@@ -979,7 +979,7 @@
 (defn sum-of-powers-of-digits
   [x n]
   (apply + (map (fn [i] (int (pow i n)))
-  							(number-to-list x))))
+  							(number->list x))))
 
 (defn get-p30-limit
 	[digit]
@@ -1023,4 +1023,5 @@
                (aux (rest ls) sum))))
   (aux (sort > ls) 0))
 
-(println (p31 [1 2 5 10 20 50 100 200] 200)) 
+(println (p31 [1 2 5 10 20 50 100 200] 200))
+
