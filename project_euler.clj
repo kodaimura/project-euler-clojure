@@ -1025,3 +1025,79 @@
 
 (println (p31 [1 2 5 10 20 50 100 200] 200))
 
+
+;; p32
+;; Pandigital products
+;; a*b=c a,b,cの桁に1~9の数字を全て使って表せる積の合計
+;; 例) 39*186=7254
+
+(defn p32 []
+  (loop [a 1
+         b 1
+         ls []]
+    (cond
+      (= a 100) (apply + (set ls)) 
+      (= b 3000) (recur (+ a 1) (+ a 1) ls)
+      (= (apply str (sort (concat (number->list a)
+                                  (number->list b)
+                                  (number->list (* a b)))))
+         "123456789") (recur a (+ b 1) (cons (* a b) ls))
+      :else (recur a (+ b 1) ls))))
+
+(println (p32))
+
+
+;; p33
+;; Digit cancelling fractions
+;; 49/98 -> 4/8 (約分と9を分子・分母からとったものが同じ)
+;; 上のような分数の積の分母
+
+;["abc" "bcd" "cde"] -> ["ab" "bd" "de"]
+;["49" "98"] -> ["4" "9"]
+(defn drop-common-string
+  [ls]
+  (loop [lls (map (fn [s] (string/split s #"")) ls)
+         fls (first lls)]
+    (cond
+      (empty? fls) 
+        (map (fn [l] (apply str l)) lls)
+      (every? (fn [l] (.contains l (first fls))) lls) 
+        (recur (map (fn [l] (drop-item l (first fls))) lls) (rest fls))
+      :else (recur lls (rest fls)))))
+
+(println (drop-common-string ["abc" "bcd" "cde"]))
+(println (drop-common-string ["49" "98"]))
+
+(defn curious-fraction?
+  [numer denom]
+  (if (and (zero? (mod numer 10)) (zero? (mod denom 10)))
+      false
+      (let [x (drop-common-string (list (str numer) (str denom)))
+            n (first x)
+            d (second x)]
+        (cond 
+          (or (= "" n) (= "" d)) false
+          (= "0" d) false
+          (= n (str numer)) false
+          :else (= (/ numer denom)
+                   (/ (Integer/parseInt n) (Integer/parseInt d)))))))
+
+(println (curious-fraction? 49 98))
+(println (curious-fraction? 30 50))
+(println (curious-fraction? 13 27))
+
+(defn p33 []
+  (loop
+    [numer 10
+     denom 10
+     ret 1]
+    (cond
+      (= denom 100) (denominator ret)
+      (= numer denom) (recur 10 (+ denom 1) ret)
+      (curious-fraction? numer denom)
+        (do (println numer denom)
+        (recur (+ numer 1) denom (* ret (/ numer denom))))
+      :else (recur (+ numer 1) denom ret))))
+
+(println (p33))
+
