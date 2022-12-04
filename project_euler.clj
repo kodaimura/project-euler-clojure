@@ -60,14 +60,14 @@
     (multiples? n 5) (+ n (p1 (- n 1)))
     :else (p1 (- n 1))))
 
-(println (p1 999))
+(println "p1" (p1 999))
 
 (defn p1-v2
   [n]
   (apply + (filter (fn [n] (or (multiples? n 3) (multiples? n 5)))
                    (range 1 n))))
 
-(println (p1-v2 1000))
+(println "p1-v2" (p1-v2 1000))
 
 
 ;; p2
@@ -88,7 +88,7 @@
   [s1 s2 limit]
   (apply + (filter even? (fibonacci s1 s2 limit))))
 
-(println (p2 1 2 4000000))
+(println "p2" (p2 1 2 4000000))
 
 
 ;; p3
@@ -127,7 +127,7 @@
   [x]
   (last (prime-factors x)))
   
-(println (p3 600851475143))
+(println "p3" (p3 600851475143))
 
 
 ;; p4
@@ -163,7 +163,7 @@
         :else 
           (recur a (+ b 1) result)))))
 
-(println (p4 3))
+(println "p4" (p4 3))
 
 
 ;; p5
@@ -182,7 +182,7 @@
         i
         (recur (+ i 1)))))
 
-;(println (p5 1 20))
+;(println "p5" (p5 1 20))
 
 
 ;; p6
@@ -203,7 +203,7 @@
   [n]
   (- (square-of-sum n) (sum-of-squares n)))
 
-(println (p6 100))
+(println "p6" (p6 100))
 
 
 ;; p7
@@ -216,7 +216,7 @@
          p 0]
     (if (= i n) p (recur (+ i 1) (next-prime p)))))
 
-(println (nth-prime 10001))
+(println "p7" (nth-prime 10001))
 
 
 ;; p8
@@ -261,7 +261,7 @@
         ret
         (recur (+ i 1) (max ret (multiply-range ls i (- (+ i x) 1)))))))
 
-(println (p8 (parse-enumerate-numbers->list p8arg*) 13))
+(println "p8" (p8 (parse-enumerate-numbers->list p8arg*) 13))
 
 
 ;; p9
@@ -278,7 +278,7 @@
       (<= c b) (recur (+ a 1) (+ a 2) (- x a a 3)) 
       :else (recur a (+ b 1) (- c 1)))))
 
-(println (p9 1000))
+(println "p9" (p9 1000))
 
 
 ;; p10
@@ -294,7 +294,7 @@
       (prime? i) (recur (+ i 1) (+ result i))
       :else (recur (+ i 1) result))))
 
-(println (sum-of-primes-below 2000000))
+;(println "p10" (sum-of-primes-below 2000000))
 
 
 ;; p11
@@ -374,7 +374,7 @@
                      (map (fn [ls] (max-product-series ls n)) (rotate90 matrix))
                      (map (fn [ls] (max-product-series ls n)) (rotate135 matrix)))))
 
-(println (p11 (parse-enumerate-numbers-with-space->matrix p11arg*) 4))
+(println "p11" (p11 (parse-enumerate-numbers-with-space->matrix p11arg*) 4))
 
 
 ;; p12
@@ -399,7 +399,7 @@
         (recur (+ i 1) (+ x i)))))
 
 (println (p12 5))
-(println (p12 500))
+(println "p12" (p12 500))
 
 
 ;; p13
@@ -512,7 +512,7 @@
   [ls]
   (subs (str (apply + ls)) 0 10))
 
-(println (p13 (parse-enumerate-numbers->lines p13arg*)))
+(println "p13" (p13 (parse-enumerate-numbers->lines p13arg*)))
 
 
 ;; p14
@@ -542,7 +542,7 @@
               (recur (+ i 1) count i)
               (recur (+ i 1) max-count ret))))))
 
-(println (p14 1000000))
+;(println "p14" (p14 1000000))
 
 
 ;; p15
@@ -575,7 +575,7 @@
   (/ (multiplication (+ (- m n) 1) m)
      (multiplication 1 n)))
 
-(println (combination 40 20))
+(println "p15" (combination 40 20))
 
 
 ;; p16
@@ -600,7 +600,7 @@
   (sum-of-digit (bigint (pow x n))))
 
 (println (p16 2 15))
-(println (p16 2 1000))
+(println "p16" (p16 2 1000))
 
 
 ;; p17
@@ -638,7 +638,7 @@
         (recur (+ i 1) (+ ret (count (number->english i)))))))
 
 (println (p17 1 5))
-(println (p17 1 1000))
+(println "p17" (p17 1 1000))
 
 
 ;; p18
@@ -673,7 +673,7 @@
              (+ x (aux (+ depth 1) (+ i 1)))))))
    (aux 0 0))
 
-(println (p18 (parse-enumerate-numbers-with-space->matrix p18arg*)))
+(println "p18" (p18 (parse-enumerate-numbers-with-space->matrix p18arg*)))
 
 
 ;; p19
@@ -720,7 +720,7 @@
                (if (= m 12) 1 (+ m 1))
                (if (= dow 1) (+ ret 1) ret)))))
 
-(println (- (p19 2 1900 1 2000 12) (p19 2 1900 1 1900 12)))
+(println "p19" (- (p19 2 1900 1 2000 12) (p19 2 1900 1 1900 12)))
 
 
 ;; p20
@@ -739,7 +739,7 @@
   [n]
   (apply + (number->list (factorial n))))
 
-(println (p20 100))
+(println "p20" (p20 100))
 
 
 ;; p21
@@ -772,7 +772,7 @@
       (amicable-number? i) (recur (+ i 1) (+ ret i))
       :else (recur (+ i 1) ret))))
 
-(println (p21 10000))
+(println "p21" (p21 10000))
 
 
 ;; p22
@@ -798,7 +798,7 @@
         (recur (+ i 1) 
                (+ ret (name-score (+ i 1) (string/replace (nth names i) #"\"" "")))))))
 
-(println (p22 (sort (string/split p22arg* #","))))
+(println "p22" (p22 (sort (string/split p22arg* #","))))
 
 
 ;; p23
@@ -835,7 +835,7 @@
       (abundant-sums-exists? i abundants) (recur (+ i 1) ret)
       :else (recur (+ i 1) (+ ret i)))))
 
-;(println (p23 28123))
+;(println "p23" (p23 28123))
 
 
 ;; p24
@@ -866,7 +866,7 @@
                   (permutations ls)))
        (- i 1)))
 
-;(println (p24 [0 1 2 3 4 5 6 7 8 9] 1000000))
+;(println "p24" (p24 [0 1 2 3 4 5 6 7 8 9] 1000000))
 
 
 ;; p25
@@ -884,7 +884,7 @@
         i
         (recur b (+ a b) (+ i 1)))))
 
-(println (p25))
+(println "p25" (p25))
 
 
 ;; p26
@@ -912,7 +912,7 @@
         ret
         (recur (+ i 1) (max ret (count (recurring-cycle 1 i)))))))
 
-(println (p26 1000))
+(println "p26" (p26 1000))
 
 
 ;; p27
@@ -933,7 +933,7 @@
       (< max-n n) (recur a (+ b 1) 0 n (* a b))
       :else (recur a (+ b 1) 0 max-n ret))))
 
-(println (p27))
+(println "p27" (p27))
 
 
 ;; p28
@@ -954,7 +954,7 @@
         (= c 4) (recur nn (+ layer 1) 1 (+ ret nn))
         :else (recur nn layer (+ c 1) (+ ret nn))))))
 
-(println (p28))
+(println "p28" (p28))
 
 
 ;; p29
@@ -970,7 +970,7 @@
       (= b 100) (recur (+ a 1) 2 (cons (pow a b) ls))
       :else (recur a (+ b 1) (cons (pow a b) ls)))))
 
-(println (p29))
+(println "p29" (p29))
 
 
 ;; p30
@@ -1007,7 +1007,7 @@
       :else (recur (+ i 1) ret))))
 
 (println (p30 4))
-(println (p30 5))
+(println "p30" (p30 5))
 
 
 ;; p31
@@ -1027,7 +1027,7 @@
                (aux (rest ls) sum))))
   (aux (sort > ls) 0))
 
-(println (p31 [1 2 5 10 20 50 100 200] 200))
+(println "p31" (p31 [1 2 5 10 20 50 100 200] 200))
 
 
 ;; p32
@@ -1048,7 +1048,7 @@
          "123456789") (recur a (+ b 1) (cons (* a b) ls))
       :else (recur a (+ b 1) ls))))
 
-(println (p32))
+(println "p32" (p32))
 
 
 ;; p33
@@ -1102,7 +1102,7 @@
         (recur (+ numer 1) denom (* ret (/ numer denom)))
       :else (recur (+ numer 1) denom ret))))
 
-(println (p33))
+(println "p33" (p33))
 
 
 ;; p34
@@ -1123,7 +1123,7 @@
         (recur (+ n 1) (+ ret n))
       :else (recur (+ n 1) ret))))
 
-;(println (p34))
+;(println "p34" (p34))
 
 
 ;; p35
@@ -1157,5 +1157,5 @@
       (circular-prime? i) (recur (next-prime i) (+ ret 1))
       :else (recur (next-prime i) ret))))
 
-(println (p35 1000000))
+(println "p35" (p35 1000000))
 
