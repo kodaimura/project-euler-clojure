@@ -1095,8 +1095,7 @@
       (= denom 100) (denominator ret)
       (= numer denom) (recur 10 (+ denom 1) ret)
       (curious-fraction? numer denom)
-        (do (println numer denom)
-        (recur (+ numer 1) denom (* ret (/ numer denom))))
+        (recur (+ numer 1) denom (* ret (/ numer denom)))
       :else (recur (+ numer 1) denom ret))))
 
 (println (p33))
