@@ -727,9 +727,13 @@
 ;; Factorial digit sum
 ;; 100!の全ての桁の数字の合計
 
+;(defn factorial
+;  [n]
+;  (if (= n 0) 1M (* n (factorial (- n 1)))))
+
 (defn factorial
   [n]
-  (if (= n 1) 1M (* n (factorial (- n 1)))))
+  (if (= n 0) 1M (apply * (range 1M (+ n 1)))))
 
 (defn p20
   [n]
@@ -1099,4 +1103,59 @@
       :else (recur (+ numer 1) denom ret))))
 
 (println (p33))
+
+
+;; p34
+;; Digit factorials
+;; 1! + 4! + 5! = 1 + 24 + 120 = 145 のような数字の合計
+;; 1! = 1 2! = 2 は含めない
+;; 999999(6桁) -> (* (factorial 9) 6) 2177280(7桁)
+;; 9999999(7桁) -> (* (factorial 9) 7) 2540160(7桁)
+;; 99999999(8桁) -> (* (factorial 9) 8) 2903040(7桁)
+;; 8桁以上は考えない
+
+(defn p34 []
+  (loop [n 3M
+         ret 0]
+    (cond
+      (= n 2540160M) ret
+      (= n (apply + (map factorial (number->list n)))) 
+        (recur (+ n 1) (+ ret n))
+      :else (recur (+ n 1) ret))))
+
+;(println (p34))
+
+
+;; p35
+;; Circular primes
+;; 197はcircular prime (197, 971, 719 全て素数)
+;; 1000000以下でcircular primeは何個あるか
+
+(defn rotations-of-digits
+  [n]
+  (loop [x (str n)
+         i (count (str n))
+         ret []]
+    (if (= i 0) 
+        ret
+        (let [x2 (str (subs x 1) (subs x 0 1))]
+          (recur x2 (- i 1) (cons (Integer/parseInt x2) ret))))))
+
+(println (rotations-of-digits 197))
+(println (rotations-of-digits 7))
+
+(defn circular-prime?
+  [n]
+  (every? prime? (rotations-of-digits n)))
+
+(defn p35
+  [limit]
+  (loop [i 1
+         ret 0]
+    (cond
+      (> i limit) ret
+      (circular-prime? i) (recur (next-prime i) (+ ret 1))
+      :else (recur (next-prime i) ret))))
+
+(println (p35 1000000))
 
