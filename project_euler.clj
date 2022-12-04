@@ -582,13 +582,13 @@
 ;; Power digit sum
 ;; 2^1000 の全ての桁の数字の和
 
-(defn number->list
+(defn integer->list
   [x]
   (map #(Integer/parseInt %) (string/split (str x) #"")))
 
 (defn sum-of-digit
   [x]
-  (apply + (number->list x)))
+  (apply + (integer->list x)))
 
 (defn pow
   [x n]
@@ -737,7 +737,7 @@
 
 (defn p20
   [n]
-  (apply + (number->list (factorial n))))
+  (apply + (integer->list (factorial n))))
 
 (println "p20" (p20 100))
 
@@ -983,7 +983,7 @@
 (defn sum-of-powers-of-digits
   [x n]
   (apply + (map (fn [i] (int (pow i n)))
-  							(number->list x))))
+  							(integer->list x))))
 
 (defn get-p30-limit
 	[digit]
@@ -1042,9 +1042,9 @@
     (cond
       (= a 100) (apply + (set ls)) 
       (= b 3000) (recur (+ a 1) (+ a 1) ls)
-      (= (apply str (sort (concat (number->list a)
-                                  (number->list b)
-                                  (number->list (* a b)))))
+      (= (apply str (sort (concat (integer->list a)
+                                  (integer->list b)
+                                  (integer->list (* a b)))))
          "123456789") (recur a (+ b 1) (cons (* a b) ls))
       :else (recur a (+ b 1) ls))))
 
@@ -1119,7 +1119,7 @@
          ret 0]
     (cond
       (= n 2540160M) ret
-      (= n (apply + (map factorial (number->list n)))) 
+      (= n (apply + (map factorial (integer->list n)))) 
         (recur (+ n 1) (+ ret n))
       :else (recur (+ n 1) ret))))
 
