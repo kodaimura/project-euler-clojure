@@ -596,7 +596,7 @@
 (defn pow
   [x n]
   (loop [i 1 ret (bigdec x)]
-    		(if (= i n) ret (recur (+ i 1) (* ret x)))))
+    (if (= i n) ret (recur (+ i 1) (* ret x)))))
 
 (defn p16
   [x n]
@@ -986,16 +986,16 @@
 (defn sum-of-powers-of-digits
   [x n]
   (apply + (map (fn [i] (int (pow i n)))
-  							(integer->list x))))
+                (integer->list x))))
 
 (defn get-p30-limit
-	[digit]
-	(loop [i 1 ret 0]
-		(let [x (* i (int (pow 9 digit)))] 
-			(cond
-				(and (not (= (count (str x)) i)) (not (= ret 0))) ret
-				(= (count (str x)) i) (recur (+ i 1) x)
-				:else (recur (+ i 1) ret)))))
+  [digit]
+  (loop [i 1 ret 0]
+    (let [x (* i (int (pow 9 digit)))] 
+      (cond
+        (and (not (= (count (str x)) i)) (not (= ret 0))) ret
+        (= (count (str x)) i) (recur (+ i 1) x)
+        :else (recur (+ i 1) ret)))))
 
 (println (get-p30-limit 4))
 (println (get-p30-limit 5))
