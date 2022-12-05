@@ -134,10 +134,13 @@
 ;; Largest palindrome product
 ;; 2つの3桁の数の積から作られる最大の回文数
 
+(defn palindrome?
+  [s]
+  (= s (apply str (reverse s))))
+
 (defn palindrome-number?
   [x]
-  (let [s (str x)]
-    (= s (apply str (reverse s)))))
+  (palindrome? (str x)))
 
 (defn max-number-of-digit
   [n]
@@ -1158,4 +1161,31 @@
       :else (recur (next-prime i) ret))))
 
 (println "p35" (p35 1000000))
+
+
+;; p36
+;; Double-base palindromes
+;; 585 = 1001001001(binary)
+;; 10進数2進数両方で回文数となる1000000以下の数字の合計
+
+(defn decimal->binary
+  [x]
+  (loop [n x ret ""]
+    (if (= n 0) 
+        ret
+        (recur (quot n 2) (str (mod n 2) ret)))))
+
+(println (decimal->binary 10))
+(println (decimal->binary 585))
+
+(defn p36
+  [limit]
+  (loop [i 1 ret 0]
+    (cond
+      (= i limit) ret
+      (and (palindrome-number? i) (palindrome? (decimal->binary i)))
+        (recur (+ i 1) (+ ret i))
+      :else (recur (+ i 1) ret))))
+
+(println "p36" (p36 1000000))
 
