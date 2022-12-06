@@ -1189,3 +1189,33 @@
 
 (println "p36" (p36 1000000))
 
+
+;; p37
+;; Truncatable primes
+;; 3797 : 3797(素数) 797(素数) 97(素数) 7(素数)
+;; 379(素数) 37(素数) 3(素数)となるような 11個の素数の合計
+
+(defn continuously-remove-digits
+  [n]
+  (let [s (str n)
+        len (count s)]
+    (concat (map (fn [i] (Integer/parseInt (subs s 0 i))) 
+                 (range 1 len))
+            (map (fn [i] (Integer/parseInt (subs s i)))
+                 (range 1 len))
+            (list n))))
+
+(defn truncatable-prime?
+  [n]
+  (if (> 10 n)
+      false
+      (every? prime? (continuously-remove-digits n))))
+
+(defn p37 []
+  (loop [i 10 c 0 ret 0]
+    (cond
+      (= c 11) ret
+      (truncatable-prime? i) (recur (next-prime i) (+ c 1) (+ ret i))
+      :else (recur (next-prime i) c ret))))
+
+(println (p37))
