@@ -1249,3 +1249,37 @@
         :else (recur i (+ n 2) ret)))))
 
 (println "p38" (p38))
+
+
+;; p39
+;; Integer right triangles
+;; {a, b, c} について p=a+b+c (p<=1000)  
+;; a,b,c それぞれを辺の長さとした三角形が直角三角形となる場合を調べたとき
+;; a,b,c の組み合わせが最も多くなるpの値
+
+(defn right-angle-triangle?
+  [a b c]
+  (let [ls (sort (list a b c))]
+    (= (+ (square (first ls)) (square (second ls))) 
+       (square (last ls)))))
+
+(defn combination-of-be-triangle
+  [p]
+  (loop [a 1 b 1 ret 0]
+    (let [c (- p a b)]
+      (cond
+        (and (= a 1) (<= c b)) ret
+        (or (= a b) (<= c b)) (recur 1 (+ b 1) ret)
+        (right-angle-triangle? a b c) (recur (+ a 1) b (+ ret 1))
+        :else (recur (+ a 1) b ret)))))
+
+(defn p39
+  [limit]
+  (loop [p 3 maximum 0 ret 0]
+    (let [cobt (combination-of-be-triangle p)]
+      (cond
+        (< limit p) ret
+        (< maximum cobt) (recur (+ p 1) cobt p)
+        :else (recur (+ p 1) maximum ret)))))
+
+;(println "p39" (p39 1000))
