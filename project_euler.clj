@@ -1218,4 +1218,34 @@
       (truncatable-prime? i) (recur (next-prime i) (+ c 1) (+ ret i))
       :else (recur (next-prime i) c ret))))
 
-(println (p37))
+(println "p37" (p37))
+
+
+;; p38
+;; Pandigital multiples
+;; 192 × 1 = 192
+;; 192 × 2 = 384
+;; 192 × 3 = 576
+;; 192 (1,2,3) -> 192384576 (:1to9 Pandigital)
+;; x (1,2,..,n) で最大の1to9 Pandigital
+
+(defn pandigital-number?
+  [n]
+  (= (sort (integer->list n))
+     (range 1 10)))
+
+(defn list->integer
+  [ls]
+  (bigint (apply str ls)))
+
+(defn p38 []
+  (loop [i 1 
+         n 2 
+         ret 0]
+    (let [x (list->integer (map (fn [m] (* m i)) (range 1 (+ n 1))))]
+      (cond
+        (< 990000000 x) (if (= n 2) ret (recur (+ i 1) 2 ret))
+        (pandigital-number? x) (recur i (+ n 1) (max ret x))
+        :else (recur i (+ n 2) ret)))))
+
+(println "p38" (p38))
