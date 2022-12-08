@@ -1283,3 +1283,32 @@
         :else (recur (+ p 1) maximum ret)))))
 
 ;(println "p39" (p39 1000))
+
+
+;; p40
+;; Champernowne's constant
+;; 0.123456789101112131415161718192021...
+;; d1 を少数1桁目の数字とする時
+;; d1 × d10 × d100 × d1000 × d10000 × d100000 × d1000000
+
+(defn nth-digits
+  [x n]
+  (Integer/parseInt (str (nth (integer->list x) n))))
+
+(defn p40
+  [ls]
+  (loop [ls (sort ls)
+         i 1 
+         c 0 
+         ret 1]
+    (let [d (digit i)
+          x (first ls)]
+      (cond
+        (empty? ls) ret
+        (<= x (+ c d)) (recur (rest ls) 
+                              (+ i 1) 
+                              (+ c d) 
+                              (* ret (nth-digits i (- x c 1))))
+        :else (recur ls (+ i 1) (+ c d) ret)))))
+
+(println "p40" (p40 [1 10 100 1000 10000 100000 1000000]))
