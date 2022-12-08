@@ -1312,3 +1312,17 @@
         :else (recur ls (+ i 1) (+ c d) ret)))))
 
 (println "p40" (p40 [1 10 100 1000 10000 100000 1000000]))
+
+
+;; p41
+;; Pandigital prime
+;; パンデジタルの中で最大の素数
+
+(defn p41 []
+  (loop [i 9]
+    (let [ls (filter prime? 
+                     (map list->integer 
+                          (permutations (range 1 (+ i 1)))))]
+      (if (empty? ls) (recur (- i 1)) (apply max ls)))))
+
+;(println "p41" (p41))
