@@ -1326,3 +1326,38 @@
       (if (empty? ls) (recur (- i 1)) (apply max ls)))))
 
 ;(println "p41" (p41))
+
+
+;; p42
+;; Coded triangle numbers
+;; Tn = 1/2 * n(n+1) 
+;; SKY = 19+11+25= 55 = T10
+;; 単語の値がTnとなる単語はいくつあるか
+
+(def p42arg*
+  (slurp "p042_words.txt"))
+
+(defn word-value
+  [s]
+  (apply + (map (fn [c] (- (int c) 64))
+                (seq (string/upper-case s)))))
+
+(defn triangle-number?
+  [n]
+  (loop [i 1]
+    (let [x (/ (* i (+ i 1)) 2)]
+      (cond
+        (< n x) false
+        (= n x) true
+        :else (recur (+ i 1))))))
+
+(defn triangle-word?
+  [s]
+  (triangle-number? (word-value s)))
+
+(defn p42 []
+  (count (filter triangle-word? 
+                 (map (fn [s] (string/replace s #"\"" ""))
+                      (string/split p42arg* #",")))))
+
+(println "p42" (p42))
