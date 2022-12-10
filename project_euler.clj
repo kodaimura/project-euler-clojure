@@ -1234,6 +1234,11 @@
   (= (sort (integer->list n))
      (range 1 10)))
 
+;(defn pandigital-number?
+;  [x m n]
+;  (= (sort > (integer->list x))
+;     (range n (- m 1) -1)))
+
 (defn list->integer
   [ls]
   (bigint (apply str ls)))
@@ -1361,3 +1366,24 @@
                       (string/split p42arg* #",")))))
 
 (println "p42" (p42))
+
+
+;; p43
+;; Sub-string divisibility
+
+(defn p43-aux
+  [ls]
+  (and
+    (zero? (mod (list->integer (list (nth ls 1) (nth ls 2) (nth ls 3))) 2))
+    (zero? (mod (list->integer (list (nth ls 2) (nth ls 3) (nth ls 4))) 3))
+    (zero? (mod (list->integer (list (nth ls 3) (nth ls 4) (nth ls 5))) 5))
+    (zero? (mod (list->integer (list (nth ls 4) (nth ls 5) (nth ls 6))) 7))
+    (zero? (mod (list->integer (list (nth ls 5) (nth ls 6) (nth ls 7))) 11))
+    (zero? (mod (list->integer (list (nth ls 6) (nth ls 7) (nth ls 8))) 13))
+    (zero? (mod (list->integer (list (nth ls 7) (nth ls 8) (nth ls 9))) 17))))
+
+(defn p43 []
+  (apply + (map list->integer 
+                (filter p43-aux (permutations [0 1 2 3 4 5 6 7 8 9])))))
+
+;(println "p43" (p43))
