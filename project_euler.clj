@@ -1347,14 +1347,19 @@
   (apply + (map (fn [c] (- (int c) 64))
                 (seq (string/upper-case s)))))
 
+;(defn triangle-number?
+;  [n]
+;  (loop [i 1]
+;    (let [x (/ (* i (+ i 1)) 2)]
+;      (cond
+;        (< n x) false
+;        (= n x) true
+;        :else (recur (+ i 1))))))
+
+;reference to p44
 (defn triangle-number?
   [n]
-  (loop [i 1]
-    (let [x (/ (* i (+ i 1)) 2)]
-      (cond
-        (< n x) false
-        (= n x) true
-        :else (recur (+ i 1))))))
+  (zero? (mod (- (Math/sqrt (+ 1 (* 8 n))) 1) 2)))
 
 (defn triangle-word?
   [s]
@@ -1387,3 +1392,42 @@
                 (filter p43-aux (permutations [0 1 2 3 4 5 6 7 8 9])))))
 
 ;(println "p43" (p43))
+
+
+;; p44
+;; Pentagon numbers
+;; Pn=n(3n-1)/2
+;; Pi=Pj+Pk, Pl=|Pk-Pj| となるものな中で
+;; |Pk-Pl|の最小値
+
+(defn pentagonal-number
+  [n]
+  (/ (* n (- (* 3 n) 1)) 2))
+
+;(defn pentagonal-number?
+;  [n]
+;  (loop [i 1]
+;    (let [x (pentagonal-number i)]
+;      (cond
+;        (< n x) false
+;        (= n x) (do (println n) true)
+;        :else (recur (+ i 1))))))
+
+;二次方程式の解の公式を使う
+;P=n(3n-1)/2
+;3n^2-n-2P=0 が自然数の解を持てば良い
+;-> (1+√1+24P)/6 が自然数となる
+(defn pentagonal-number?
+  [n]
+  (zero? (mod (+ 1 (Math/sqrt (+ 1 (* 24 n)))) 6)))
+
+(defn p44 []
+  (loop [j 1 k 2]
+    (cond 
+      (= j 0) (recur k (+ k 1))
+      (and (pentagonal-number? (- (pentagonal-number k) (pentagonal-number j)))
+           (pentagonal-number? (+ (pentagonal-number j) (pentagonal-number k))))
+        (- (pentagonal-number k) (pentagonal-number j))
+      :else (recur (- j 1) k))))
+
+(println "p44" (p44))
