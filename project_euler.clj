@@ -1457,3 +1457,38 @@
           (recur (+ i 1))))))
 
 (println "p45" (p45))
+
+
+;; p46
+;; Goldbach's other conjecture
+;; 素数+2*n^2の形で表せない奇数合成数の最小値
+;; 合成数: 1とその数自身以外の約数を持つ自然数
+
+(defn composite-number?
+  [n]
+  (and (not (= n 1)) (not (prime? n))))
+
+(defn next-odd-composite-number
+  [n]
+  (loop [n (if (odd? n) (+ n 2) (+ n 1))]
+    (if (composite-number? n)
+        n
+        (recur (+ n 2)))))
+
+(defn goldbach?
+  [n]
+  (loop [p 2 i 1]
+    (let [x (+ p (* 2 (square i)))]
+      (cond
+        (< n p) false
+        (= n x) true
+        (< n x) (recur (next-prime p) 1)
+        :else (recur p (+ i 1))))))
+
+(defn p46 []
+  (loop [i 9]
+    (if (goldbach? i)
+        (recur (next-odd-composite-number i))
+        i)))
+
+(println "p46" (p46))
