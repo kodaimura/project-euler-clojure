@@ -1431,3 +1431,29 @@
       :else (recur (- j 1) k))))
 
 (println "p44" (p44))
+
+
+;; p45
+;; Triangular, pentagonal, and hexagonal
+;; Triangle: Tn=n(n+1)/2
+;; Pentagonal: Pn=n(3n−1)/2
+;; Hexagonal: Hn=n(2n−1)
+;; T285 = P165 = H143 = 40755
+;; Find the next triangle number that is also pentagonal and hexagonal
+
+(defn hexagonal-number?
+  [n]
+  (zero? (mod (+ 1 (Math/sqrt (+ 1 (* 8 n)))) 4)))
+
+(defn triangle-number
+  [n]
+  (/ (* n (+ n 1)) 2))
+
+(defn p45 []
+  (loop [i 286]
+    (let [x (triangle-number i)]
+      (if (and (pentagonal-number? x) (hexagonal-number? x))
+          x
+          (recur (+ i 1))))))
+
+(println "p45" (p45))
