@@ -115,13 +115,15 @@
 
 (defn prime-factors
   [x]
-  (loop [n x
-         p 2
-         result []]
-    (cond
-      (prime? n) (conj result n)
-      (zero? (mod n p)) (recur (/ n p) p (conj result p))
-      :else (recur n (next-prime p) result))))
+  (if (< x 2) 
+      []
+      (loop [n x
+             p 2
+             result []]
+        (cond
+          (prime? n) (conj result n)
+          (zero? (mod n p)) (recur (/ n p) p (conj result p))
+          :else (recur n (next-prime p) result)))))
 
 (defn p3
   [x]
@@ -1492,3 +1494,18 @@
         i)))
 
 (println "p46" (p46))
+
+
+;; p47
+;; Distinct primes factors
+;; それぞれ4つの異なる素因数を持つ連続する4つの数の最初の数
+
+(defn p47
+  [n]
+  (loop [i 1 c 0]
+    (cond
+      (= c n) (- i n)
+      (= n (count (set (prime-factors i)))) (recur (+ i 1) (+ c 1))
+      :else (recur (+ i 1) 0))))
+
+(println "p47" (p47 4))
