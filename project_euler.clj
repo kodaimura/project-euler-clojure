@@ -1509,3 +1509,19 @@
       :else (recur (+ i 1) 0))))
 
 (println "p47" (p47 4))
+
+
+;; p48
+;; Self powers
+;; 1^1 + 2^2 + 3^3 + ... + 1000^1000 の末尾10桁
+
+(defn p48 
+  [n]
+  (loop [i 1 ret 0N]
+    (if (= i (+ n 1))
+        ret
+        (let [x (+ ret (pow i i))
+              d (digit x)]
+          (recur (+ i 1) (bigint (subs (str x) (max 0 (- d 10)) d)))))))
+
+(println "p48" (p48 1000))
