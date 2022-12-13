@@ -1525,3 +1525,27 @@
           (recur (+ i 1) (bigint (subs (str x) (max 0 (- d 10)) d)))))))
 
 (println "p48" (p48 1000))
+
+
+;; p49
+;; Prime permutations
+;; 3330で増加する連続する3つの数で、
+;; 3数全て素数かつ4桁の数がそれぞれ互いの順列
+
+(defn prime-permutations?
+  [ls]
+  (and (every? prime? ls)
+       (= 1 (count (set (map 
+                         (fn [x] (apply str (sort (str x)))) 
+                          ls))))))
+
+(defn p49 []
+  (loop [a 1000]
+    (let [b (+ a 3330)
+          c (+ b 3330)]
+      (cond
+        (= a 1487) (recur (+ a 1))
+        (prime-permutations? (list a b c)) (str a b c)
+        :else (recur (+ a 1))))))
+
+(println "p49" (p49))
