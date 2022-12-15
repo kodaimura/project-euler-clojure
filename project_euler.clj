@@ -1549,3 +1549,31 @@
         :else (recur (+ a 1))))))
 
 (println "p49" (p49))
+
+
+;; p50
+;; Consecutive prime sum
+;; 最も連続した素数の和として書ける100万未満の素数
+
+(defn prime-list
+  [limit]
+  (loop [i 2 ret []]
+    (if (< limit i)
+        ret
+        (recur (next-prime i) (conj ret i)))))
+
+(defn p50 
+  [limit]
+  (def pls (prime-list (/ limit 2)))
+  (def len (count pls))
+  (loop [i 0 x 0 chain 0 max-chain 0 ret 0]
+    (cond
+      (and (= chain 0) (= i (- len 1))) ret
+      (or (< limit x) (= i (- len 1)))
+        (recur (+ (- i chain) 1) 0 0 max-chain ret)
+      (and (prime? x) (< max-chain chain))
+        (recur (+ i 1) (+ x (nth pls i)) (+ chain 1) chain x)
+      :else 
+        (recur (+ i 1) (+ x (nth pls i)) (+ chain 1) max-chain ret))))
+
+(println "p50" (p50 1000000))
