@@ -1577,3 +1577,62 @@
         (recur (+ i 1) (+ x (nth pls i)) (+ chain 1) max-chain ret))))
 
 (println "p50" (p50 1000000))
+
+
+;; p51
+;; Prime digit replacements
+;; 56**3 の*の部分を 0 ~ 9で置換
+;; 56003, 56113, 56333, 56443, 56663, 56773, 56993 の7つの素数
+;; 8つの素数があるパターン
+
+;(defn insert-at
+;  [ls i x]
+;  (concat (take i ls) (list x) (drop i ls)))
+
+;(make-replacements "56xx3" "x" ["0" "1" "2"]) -> ["56003" "56113" "56223"] 
+(defn make-replacements
+  [s match ls]
+  (map (fn [x] (string/replace s match x)) ls))
+
+;"56xx3" -> [56003 56113 ... 56993]
+(defn p51-digit-replacements
+  [s]
+  (map-parse-int 
+   (make-replacements s "x" ["0" "1" "2" "3" "4" "5" "6" "7" "8" "9"])))
+
+;(defn str> [a b] (= 1 (String/.compareTo a b)))
+
+;563 -> ["5xx63" "5x6x3" "5x63x" "56xx3" "56x3x" "563xx"] 
+(defn p51-make-replace-targets
+  [n]
+  (filter (fn [s] (and (not= (subs s 0 1) "x") 
+                       (= (str n) (string/replace s #"x" ""))))
+          (map (fn [l] (apply str l))
+               (into [] 
+                (set 
+                 (permutations 
+                  (concat (map str (integer->list n))
+                          ["x" "x"])))))))
+
+(println (make-replacements "56xx3" "x" ["0" "1" "2"]))
+(println (p51-digit-replacements "56xx3"))
+(println (p51-make-replace-targets 563))
+
+(defn p51-aux
+  [n x]
+  (loop [ls (p51-make-replace-targets n)]
+    (if (empty? ls) 
+        nil
+        (let [ps (filter prime? (p51-digit-replacements (first ls)))] 
+          (if (= x (count ps))
+              (apply min ps)
+              (recur (rest ls)))))))
+  
+(defn p51
+  [x]
+  (loop [i 1]
+    (let [result (p51-aux i x)]
+      (if (nil? result) (recur (+ i 1)) result))))
+
+(println "p51" (p51 7))
+;(println "p51" (p51 8))
