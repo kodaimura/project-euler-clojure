@@ -1636,3 +1636,25 @@
 
 (println "p51" (p51 7))
 ;(println "p51" (p51 8))
+
+
+;; p52
+;; Permuted multiples
+;; x, 2x, 3x, 4x, 5x, 6x 全てで同じ数字を持つ最小のx
+
+(defn permuted-numbers?
+  [ls]
+  (apply = (map set (map integer->list ls))))
+
+(println (permuted-numbers? [123 321 3132]))
+(println (permuted-numbers? [1234 432 1423]))
+(println (permuted-numbers? '(125874 251748)))
+
+(defn p52
+  [n]
+  (loop [i 1]
+    (if (permuted-numbers? (map (fn [x] (* i x)) (range 1 (+ n 1))))
+        i
+        (recur (+ i 1)))))
+
+(println "p52" (p52 6))
