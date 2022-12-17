@@ -1658,3 +1658,19 @@
         (recur (+ i 1)))))
 
 (println "p52" (p52 6))
+
+
+;; p53
+;; Combinatoric selections
+;; 1 <= n <= 100 の間に nCrが1000000を超えるのは何通り
+
+(defn p53
+  [x]
+  (loop [n 1 r 1 ret 0]
+    (cond
+      (= n 101) ret
+      (= r n) (recur (+ n 1) 1 ret)
+      (< x (combination n r)) (recur n (+ r 1) (+ ret 1))
+      :else (recur n (+ r 1) ret))))
+
+(println "p53" (p53 1000000))
