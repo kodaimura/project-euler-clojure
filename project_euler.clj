@@ -43,6 +43,11 @@
   [block]
   (map bigdec (divide-into-lines block)))
 
+;一行をスペース区切りでリストにし二次元リストに変換する
+(defn parse-enumerate-with-space->matrix
+  [block]
+  (map (fn [line] (string/split line #" "))
+       (divide-into-lines block)))
 
 ;; p1
 ;; Multiples of 3 or 5
@@ -1674,3 +1679,144 @@
       :else (recur n (+ r 1) ret))))
 
 (println "p53" (p53 1000000))
+
+
+;; p54
+;; Poker hands
+;; High Card: Highest value card.
+;; One Pair: Two cards of the same value.
+;; Two Pairs: Two different pairs.
+;; Three of a Kind: Three cards of the same value.
+;; Straight: All cards are consecutive values.
+;; Flush: All cards of the same suit.
+;; Full House: Three of a kind and a pair.
+;; Four of a Kind: Four cards of the same value.
+;; Straight Flush: All cards are consecutive values of same suit.
+;; Royal Flush: Ten, Jack, Queen, King, Ace, in same suit.
+
+(def p54arg (slurp "p054_poker.txt"))
+(def pokerhands (parse-enumerate-with-space->matrix p54arg))
+
+(defn p1hand [ls] (take 5 ls))
+(defn p2hand [ls] (drop 5 ls))
+
+(def poker-card-value
+  {"1" 1 "2" 2 "3" 3 "4" 4 "5" 5
+   "6" 6 "7" 7 "8" 8 "9" 9 "T" 10
+   "J" 11 "Q" 12 "K" 13 "A" 14})
+
+(defn card-value [card] (poker-card-value (subs card 0 1)))
+(defn card-suit [card] (subs card 1 2))
+
+(defn rember
+  [ls x]
+  (loop [ls ls ret []]
+    (cond
+      (empty? ls) ret
+      (= (first ls) x) (recur (rest ls) ret)
+      :else (recur (rest ls) (conj ret (first ls))))))
+
+(defn count-x
+  [ls x]
+  (count (filter (fn [n] (= n x)) ls)))
+
+(defn same-all?
+  [ls]
+  (= 1 (count (set ls))))
+
+(defn consecutive?
+  [ls]
+  (= (sort ls) (range (apply min ls) (+ 1 (apply max ls)))))
+
+(defn eph-sort-cond
+  [a b]
+  (if (= (second a) (second b))
+      (> (first a) (first b))
+      (> (second a) (second b))))
+
+;["2H" "5C" "3D" "2D" "3S"] -> ((3 2) (2 2) (5 1))
+(defn encode-poker-hand
+  [ls]
+  (loop [lv (map card-value ls) ret []]
+    (if (empty? lv) 
+        (sort eph-sort-cond ret)
+        (let [x (first lv)]
+          (recur (rember lv x) (cons (list x (count-x lv x)) ret))))))
+
+(println (encode-poker-hand ["2H" "5C" "3D" "2D" "3S"]))
+(println (encode-poker-hand ["QH" "5C" "AD" "KD" "JS"]))
+(println (encode-poker-hand ["2H" "3C" "3D" "2D" "3S"]))
+
+(defn poker-one-pair?
+  [enc]
+  (and (= (second (first enc)) 2) 
+       (= (count enc) 4)))
+
+(defn poker-two-pairs?
+  [enc]
+  (and (= (second (first enc)) 2)
+       (= (count enc) 3)))
+  
+(defn poker-three-cards?
+  [enc]
+  (and (= (second (first enc)) 3)
+       (= (count enc) 3)))
+
+(defn poker-straight?
+  [enc]
+  (and (= (count enc) 5)
+       (consecutive? (sort (map first enc)))))
+
+(defn poker-full-house?
+  [enc]
+  (and (= (second (first enc)) 3)
+       (= (count enc) 2)))
+
+(defn poker-four-card?
+  [enc]
+  (= (second (first enc)) 4))
+
+(defn poker-flush?
+  [ls]
+  (same-all? (map card-suit ls)))
+
+(defn eval-poker-value
+  [ls]
+  (loop [enc (encode-poker-hand ls)
+         k 100000000
+         ret 0]
+    (if (empty? enc)
+        ret
+        (let [e (first enc)]
+          (recur (rest enc) (/ k 100)
+                 (+ ret (* (first e) k (second e))))))))
+
+(defn eval-poker-hand-aux
+  [ls]
+  (def f (if (poker-flush? ls) 80000000000 0))
+  (def enc (encode-poker-hand ls))
+  (cond
+    (poker-four-card? enc) 130000000000
+    (poker-full-house? enc) 120000000000
+    (poker-straight? enc) (+ f 60000000000)
+    (poker-three-cards? enc) 50000000000
+    (poker-two-pairs? enc) (+ f 30000000000)
+    (poker-one-pair? enc) (+ f 20000000000)
+    :else f))
+
+(defn eval-poker-hand
+  [ls]
+  (+ (eval-poker-hand-aux ls)
+     (eval-poker-value ls)))
+
+(defn p54 
+  [hands]
+  (loop [ls hands ret 0]
+    (cond
+      (empty? ls) ret
+      (< (eval-poker-hand (p2hand (first ls))) 
+         (eval-poker-hand (p1hand (first ls))))
+        (recur (rest ls) (+ ret 1))
+      :else (recur (rest ls) ret))))
+
+(println "p54" (p54 pokerhands))
