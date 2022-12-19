@@ -1845,3 +1845,20 @@
       :else (recur (+ i 1) ret))))
 
 (println "p55" (p55 10000))
+
+
+;; p56
+;; Powerful digit sum
+
+(defn sum-digit
+  [n]
+  (apply + (integer->list n)))
+
+(defn p56 []
+  (loop [a 1 b 1 ret 0]
+    (cond
+      (and (= a 100) (= b 100)) ret
+      (= b 100) (recur (+ a 1) 1 ret)
+      :else (recur a (+ b 1) (max ret (sum-digit (pow a b)))))))
+
+(println "p56" (p56))
