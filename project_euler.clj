@@ -1820,3 +1820,28 @@
       :else (recur (rest ls) ret))))
 
 (println "p54" (p54 pokerhands))
+
+
+;; p55
+;; Lychrel numbers
+;; 反転させた数を足すことを何度(50未満)繰り返しても答えが回文数にならない数
+;; 10000未満のLychrel数の個数
+
+(defn lychrel-number?
+  [n]
+  (loop [n n c 0]
+    (let [x (+ n (bigint (apply str (reverse (str n)))))]
+      (cond
+        (= c 50) true
+        (palindrome-number? x) false
+        :else (recur x (+ c 1))))))
+
+(defn p55
+  [limit]
+  (loop [i 1 ret 0]
+    (cond
+      (= i limit) ret
+      (lychrel-number? i) (recur (+ i 1) (+ ret 1))
+      :else (recur (+ i 1) ret))))
+
+(println "p55" (p55 10000))
