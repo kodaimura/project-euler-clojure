@@ -1862,3 +1862,21 @@
       :else (recur a (+ b 1) (max ret (sum-digit (pow a b)))))))
 
 (println "p56" (p56))
+
+
+;; p57
+;; Square root convergents
+;; 分子の桁数が分母の桁数より大きい分数
+
+(defn p57
+  [n]
+  (loop [i 0 x (/ 1 2) ret 0]
+    (if (= i n) 
+        ret
+        (let [nx (/ 1 (+ 2 x))
+              m (+ 1 nx)]
+          (if (< (digit (denominator m)) (digit (numerator m)))
+              (recur (+ c 1) nx (+ ret 1))
+              (recur (+ c 1) nx ret))))))
+
+(println "p57" (p57 1000))
