@@ -1876,7 +1876,7 @@
         (let [nx (/ 1 (+ 2 x))
               m (+ 1 nx)]
           (if (< (digit (denominator m)) (digit (numerator m)))
-              (recur (+ c 1) nx (+ ret 1))
-              (recur (+ c 1) nx ret))))))
+              (recur (+ i 1) nx (+ ret 1))
+              (recur (+ i 1) nx ret))))))
 
 (println "p57" (p57 1000))
