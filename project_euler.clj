@@ -1880,3 +1880,22 @@
               (recur (+ i 1) nx ret))))))
 
 (println "p57" (p57 1000))
+
+
+;; p58
+;; Spiral primes
+
+(defn p58
+  [percent]
+  (loop [i 1 xc 1 pc 0 
+         layer 1 c 1]
+    (let [x (+ i (* 2 layer))]
+      (cond 
+        (not= c 4) (recur x (+ xc 1) (if (prime? x) (+ pc 1) pc)
+                          layer (+ c 1))
+        (< (* 100 (/ pc xc)) percent) (- (* 2 layer) 1)
+        :else (recur x (+ xc 1) (if (prime? x) (+ pc 1) pc)
+                     (+ layer 1) 1)))))
+
+(println "p58" (p58 10))
+
