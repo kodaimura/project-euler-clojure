@@ -1902,3 +1902,42 @@
 
 ;; p59
 ;; XOR decryption
+
+
+;; p60
+;; Prime pair sets
+;; 任意の 2 つの素数を連結して別の素数を生成する 5つの素数
+
+(defn combinations
+  [ls n]
+  (cond
+    (<= (count ls) n) (list ls)
+    (= n 1) (map list ls)
+    :else (concat (map (fn [l] (cons (first ls) l)) (combinations (rest ls) (- n 1))) 
+                  (combinations (rest ls) n))))
+
+(println (combinations [1 2 3 4] 2))
+  
+(defn prime-pair-sets?
+  [ls]
+  (if (empty? ls)
+      false
+      (let [l (combinations ls 2)]
+        (every? prime? (map (fn [x] (Integer/parseInt (apply str x))) 
+                       (concat l (map reverse l)))))))
+
+(println (prime-pair-sets? [3 7 109 673]))
+(println (prime-pair-sets? [3 7 13 109]))
+
+(defn p60 
+  [n]
+  (loop [i 3 ls (map (fn [x] (list)) (range n))]
+    (if (not (empty? (first ls))) 
+        (apply + (first (first ls)))
+        (let [l (concat (rest ls) (list (list (list))))
+              l* (map (fn [x] (map (fn [y] (cons i y)) x)) l)
+              ls* (map (fn [x] (filter prime-pair-sets? x)) l*)]
+          (recur (next-prime i) (map concat ls ls*))))))
+
+(println "p60" (p60 4))
+;(println "p60" (p60 5))
