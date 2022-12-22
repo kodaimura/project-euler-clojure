@@ -1899,3 +1899,6 @@
 
 (println "p58" (p58 10))
 
+
+;; p59
+;; XOR decryption
