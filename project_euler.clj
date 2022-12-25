@@ -1941,3 +1941,87 @@
 
 (println "p60" (p60 4))
 ;(println "p60" (p60 5))
+
+
+;; p61
+;; Cyclical figurate numbers
+
+(defn triangle
+  [n]
+  (/ (* n (+ n 1)) 2))
+
+(defn square
+  [n]
+  (* n n))
+
+(defn pentagonal
+  [n]
+  (/ (* n (- (* 3 n) 1)) 2))
+
+(defn hexagonal
+  [n]
+  (* n (- (* 2 n) 1)))
+
+(defn heptagonal
+  [n]
+  (/ (* n (- (* 5 n) 3)) 2))
+
+(defn octagonal
+  [n]
+  (* n (- (* 3 n) 2)))
+
+(defn xgonal-4digits
+  [f]
+  (loop [i 1 ret []]
+    (let [n (f i)]
+      (cond
+        (< 9999 n) ret
+        (< 999 n) (recur (+ i 1) (conj ret n))
+        :else (recur (+ i 1) ret)))))
+
+;1234 -> ["12" "34"]
+(defn sprit-4digit->2digit
+  [n]
+  (let [s (str n)]
+    (list (subs s 0 2) (subs s 2 4))))
+
+;[["12" "34"] ["12" "56"] ["34" "56"]]
+;-> {"12" ["34" "56"], "34" ["56"]}
+(defn make-hashmap61
+  [ls]
+  (loop [ls ls ret {}]
+    (if (empty? ls) 
+        ret
+        (let [x (first ls)]
+          (if (contains? ret (first x))
+              (recur (rest ls) (assoc ret (first x) (cons (second x) (get ret (first x)))))
+              (recur (rest ls) (assoc ret (first x) (list (second x)))))))))
+
+(defn p61-aux
+  [ls]
+  (println ls))
+
+(defn p61 []
+  (let [tri (xgonal-4digits triangle)
+        squ (xgonal-4digits square)
+        pen (xgonal-4digits pentagonal)
+        hex (xgonal-4digits hexagonal)
+        hep (xgonal-4digits heptagonal)
+        oct (xgonal-4digits octagonal)
+
+        tri2 (map sprit-4digit->2digit tri)
+        squ2 (map sprit-4digit->2digit squ)
+        pen2 (map sprit-4digit->2digit pen)
+        hex2 (map sprit-4digit->2digit hex)
+        hep2 (map sprit-4digit->2digit hep)
+        oct2 (map sprit-4digit->2digit oct)
+
+        trih (make-hashmap61 tri2)
+        squh (make-hashmap61 squ2)
+        penh (make-hashmap61 pen2)
+        hexh (make-hashmap61 hex2)
+        heph (make-hashmap61 hep2)
+        octh (make-hashmap61 oct2)]
+    (p61-aux (list trih squh penh hexh heph octh))))
+
+;(println (p61))
