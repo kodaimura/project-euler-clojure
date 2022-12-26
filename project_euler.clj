@@ -2025,3 +2025,57 @@
     (p61-aux (list trih squh penh hexh heph octh))))
 
 ;(println (p61))
+
+
+;; p62
+;; Cubic permutations
+
+(defn cube [n] (* n n n))
+
+(defn cube?
+  [n]
+  (loop [i 1]
+    (cond
+      (< n (cube i)) false
+      (== n (cube i)) true
+      :else (recur (+ i 1)))))
+
+;123 -> [123 132 213 231 312 321]
+(defn digit-permutations
+  [n]
+  (map bigint (map (fn [ls] (apply str ls))
+                   (permutations (integer->list n)))))
+
+(defn p62-v0 
+  [n]
+  (loop [i 1] 
+    (let [ls (set (filter (fn [x] (and (cube? x) (<= (cube i) x)))
+                          (digit-permutations (cube i))))]
+      (if (= (count ls) n)
+          ls
+          (recur (+ i 1))))))
+
+(println (digit-permutations 123))
+(println (set (filter cube? (digit-permutations 41063625))))
+
+;;p62別解 (v0は遅すぎる)
+
+;41063625 -> "01234566"
+;56623104 -> "01234566"
+(defn make-key62
+  [n]
+  (apply str (sort (integer->list n))))
+
+(defn p62
+  [n]
+  (loop [i 1 hm {}]
+    (let [c (cube i)
+          k (make-key62 c)
+          l (get hm k)]
+      (cond 
+        (nil? l) (recur (+ i 1) (assoc hm k (list c)))
+        (= (count l) (- n 1)) (apply min (cons c l))
+        :else (recur (+ i 1) (assoc hm k (cons c l)))))))
+
+(println (p62 3))
+(println "p62" (p62 5))
