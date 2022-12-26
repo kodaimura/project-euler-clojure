@@ -2082,3 +2082,19 @@
 (println (p62 3))
 (println "p62" (p62 5))
 
+
+;; p63
+;; Powerful digit counts
+;; 自然数xをn乗して得られるn桁の整数は何個あるか?
+;; 10のn乗はn+1桁となるためxは10まで
+
+(defn p63 []
+  (loop [x 1 n 1 ret 0]
+    (let [d (digit (pow x n))]
+      (cond 
+        (= x 10) ret
+        (> n d) (recur (+ x 1) 1 ret)
+        (= n d) (recur x (+ n 1) (+ ret 1))
+        :else (recur x (+ n 1) ret)))))
+
+(println "p63" (p63))
