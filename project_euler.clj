@@ -2172,3 +2172,33 @@
 (println (pick-max-adjacent [6 4 3 5 2]))
 (println (p67 [[1] [1 2] [3 2 4] [1 2 3 4]]))
 (println "p67" (p67 p67arg))
+
+
+;; p69
+;; Totient maximum
+
+(defn totient
+  [n]
+  (if (= n 1)
+      1
+      (apply * (cons n (map (fn [p] (- 1 (/ 1 p))) 
+                            (set (prime-factors n)))))))
+
+(println (totient 1))
+(println (totient 2))
+(println (totient 3))
+(println (totient 4))
+(println (totient 5))
+
+(defn p69
+  [n]
+  (loop [n n maximum 0 ret 0]
+    (if (= 1 n) 
+        ret
+        (let [x (/ n (totient n))]
+          (if (< maximum x)
+              (recur (- n 1) x n)
+              (recur (- n 1) maximum ret))))))
+
+(println (p69 10))
+;(println "p69" (p69 1000000))
