@@ -2098,3 +2098,33 @@
         :else (recur x (+ n 1) ret)))))
 
 (println "p63" (p63))
+
+
+;; p65
+;; Convergents of e
+
+(defn convergents
+  [x ls]
+  (defn aux 
+    [ls]
+    (if (nil? (second ls))
+        (first ls) 
+        (+ (first ls) (/ 1 (aux (rest ls))))))
+  (+ x (/ 1 (aux ls))))
+
+(defn seq65-for-e
+  [n]
+  (take n (flatten 
+           (map (fn [i] [1 (* i 2) 1]) 
+                (range 1 (+ 2 (quot n 3)))))))
+
+(defn p65
+  [n]
+  (apply + (integer->list 
+            (numerator (convergents 2 (seq65-for-e (- n 1)))))))
+
+(println (convergents 1 [2 2 2]))
+(println (convergents 2 [1 2 1 1 4 1]))
+(println (seq65-for-e 10))
+(println (p65 10))
+(println "p65" (p65 100))
