@@ -2128,3 +2128,47 @@
 (println (seq65-for-e 10))
 (println (p65 10))
 (println "p65" (p65 100))
+
+
+;; p67
+;; Maximum path sum II
+;; p18の改良版で解く
+;; 1
+;; 1 2
+;; 3 2 4
+;; 1 2 3 4
+;; ->
+;; 1
+;; 1 2
+;; 5 5 8
+;; ->
+;; 1
+;; 6 10
+;; ->
+;; 11
+
+(def p67arg
+  (parse-enumerate-numbers-with-space->matrix
+   (slurp "p067_triangle.txt")))
+
+;隣接する2数から大きい方の値を残す
+;(6 4 3 5 2) -> (6 4 5 5)
+(defn pick-max-adjacent
+  [ls]
+  (loop [ls ls ret []]
+    (if (= 1 (count ls))
+        ret
+        (recur (rest ls) (conj ret (max (first ls) (second ls)))))))
+
+(defn p67
+  [triangle]
+  (loop [ls (reverse triangle)
+         l (map (fn [i] 0) (first ls))]
+    (if (= (count ls) 1)
+        (+ (first (first ls)) (first l))
+        (recur (rest ls)
+               (pick-max-adjacent (map + (first ls) l))))))
+
+(println (pick-max-adjacent [6 4 3 5 2]))
+(println (p67 [[1] [1 2] [3 2 4] [1 2 3 4]]))
+(println "p67" (p67 p67arg))
