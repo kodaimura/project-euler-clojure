@@ -2230,7 +2230,7 @@
 
 ;; p71
 ;; Ordered fractions
-;; n/d (n<d d<=1000000)のを昇順に並べて3/7のすぐ左にある分数の分子
+;; n/d (n<d d<=1000000)を昇順に並べて3/7のすぐ左にある分数の分子
 
 (defn p71 
   [limit]
@@ -2243,3 +2243,29 @@
         :else (recur d (+ n 1) ret)))))
 
 (println "p71" (p71 1000000))
+
+
+;; p72
+;; Counting fractions
+;; n/d (n<d d<=1000000)について約分できるものを除いた分数の数
+
+(defn can-reduce? 
+  [n d]
+  (= n (numerator (/ n d))))
+
+;遅い
+(defn p72-v0
+  [limit]
+  (loop [n 1 d 1 ret 0]
+    (cond
+      (< limit d) ret
+      (<= d n) (recur 1 (+ d 1) ret)
+      (can-reduce? n d) (recur (+ n 1) d ret)
+      :else (recur (+ n 1) d (+ ret 1)))))
+
+;d=10: 1/10,3/10,7/10, 9/10 -> 4 -> (totient 10)
+(defn p72
+  [d]
+  (apply + (map totient (range 2 (+ d 1)))))
+
+;(println "p72" (p72 1000000))
