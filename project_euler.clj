@@ -2225,4 +2225,21 @@
         :else (recur (+ i 2) tmin ret)))))
 
 (println (permutation-numbers? 87109 (totient 87109)))
-(println "p70" (p70 10000000))  ;遅すぎるけど...
+;(println "p70" (p70 10000000))  ;遅すぎるけど...
+
+
+;; p71
+;; Ordered fractions
+;; n/d (n<d d<=1000000)のを昇順に並べて3/7のすぐ左にある分数の分子
+
+(defn p71 
+  [limit]
+  (loop [d 1 n 1 ret 0]
+    (let [x (/ n d)]
+      (cond
+        (< limit d) (numerator ret)
+        (< (/ 3 7) x) (recur (+ d 1) n ret)
+        (and (< x (/ 3 7)) (< 0 x)) (recur d (+ n 1) x)
+        :else (recur d (+ n 1) ret)))))
+
+(println "p71" (p71 1000000))
