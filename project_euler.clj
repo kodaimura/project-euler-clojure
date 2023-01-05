@@ -2202,3 +2202,27 @@
 
 (println (p69 10))
 ;(println "p69" (p69 1000000))
+
+
+;; p70
+;; Totient permutation
+;; (totient 87109) => 79180 となる数字の中で
+;; (/ n (totient n))が最小となるn
+
+(defn permutation-numbers?
+  [a b]
+  (== (list->integer (sort > (integer->list a)))
+      (list->integer (sort > (integer->list b)))))
+
+(defn p70 
+  [n]
+  (loop [i 3 tmin ##Inf ret ##NaN]
+    (let [t (totient i)]
+      (cond
+        (< n i) ret
+        (and (permutation-numbers? i t) (< (/ i t) tmin)) 
+          (recur (+ i 2) (/ i t) i)
+        :else (recur (+ i 2) tmin ret)))))
+
+(println (permutation-numbers? 87109 (totient 87109)))
+(println "p70" (p70 10000000))  ;遅すぎるけど...
