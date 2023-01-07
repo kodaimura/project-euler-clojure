@@ -2251,7 +2251,7 @@
 
 (defn can-reduce? 
   [n d]
-  (= n (numerator (/ n d))))
+  (not= n (numerator (/ n d))))
 
 ;遅い
 (defn p72-v0
@@ -2269,3 +2269,27 @@
   (apply + (map totient (range 2 (+ d 1)))))
 
 ;(println "p72" (p72 1000000))
+
+
+;; p73
+;; Counting fractions in a range
+;; n/d (n<d HCF(n,d)=1 d<=12000)について1/3 1/2の間にある分数の数
+
+(defn reduced-fraction?
+  [n d]
+  (not (can-reduce? n d)))
+
+(defn p73
+  [a b limit]
+  (loop [n 1 d 1 ret 0]
+    (let [x (/ n d)]
+      (cond
+        (< limit d) ret
+        (<= b x) (recur 1 (+ d 1) ret)
+        (<= x a) (recur (+ n 1) d ret)
+        (reduced-fraction? n d) (recur (+ n 1) d (+ ret 1))
+        :else (recur (+ n 1) d ret)))))
+
+(println (p73 (/ 1 3) (/ 1 2) 8))
+;(println "p73" (p73 (/ 1 3) (/ 1 2) 12000))
+
