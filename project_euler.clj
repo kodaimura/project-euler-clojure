@@ -2293,3 +2293,35 @@
 (println (p73 (/ 1 3) (/ 1 2) 8))
 ;(println "p73" (p73 (/ 1 3) (/ 1 2) 12000))
 
+
+;; p74
+;; Digit factorial chains
+;; 1! + 4! + 5! = 1 + 24 + 120 = 145
+;; 169 → 363601 → 1454 → 169
+;; 69 → 363600 → 1454 → 169 → 363601 → 1454
+;; 100万以下の開始数で 60チェーンが繋がるのは何個
+
+(defn factorial-of-digits
+  [n]
+  (int (apply + (map factorial (integer->list n)))))
+
+(defn count-chain
+  [n]
+  (loop [n n ret 0 chain {}]
+      (if (contains? chain n) 
+          ret
+          (recur (factorial-of-digits n) (+ ret 1) (assoc chain n nil)))))
+
+(defn p74
+  [limit]
+  (loop [i 1 ret 0]
+    (cond
+      (>= i limit) ret
+      (= 60 (count-chain i)) (recur (+ i 1) (+ ret 1))
+      :else (recur (+ i 1) ret))))
+
+(println (factorial-of-digits 145))
+(println (factorial-of-digits 69))
+(println (count-chain 145))
+(println (count-chain 69))
+;(println "74" (p74 1000000))
