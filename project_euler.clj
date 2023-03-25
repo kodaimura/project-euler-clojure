@@ -2325,3 +2325,56 @@
 (println (count-chain 145))
 (println (count-chain 69))
 ;(println "74" (p74 1000000))
+
+
+;; p76
+;; Counting summations
+;; 2つ以上の正の整数の和として 100 を表す方法は何通り
+
+;(defn count-ways-sum-of-two
+;  [x]
+;  (loop [ret 0 i 1]
+;    (if (< (- x i) i)
+;        ret
+;        (recur (+ ret 1) (+ i 1)))))
+
+;a + b = x で b >= a となる組み合わせ
+;(defn count-ways-sum-of-two
+;  [a b]
+;  (loop [ret 0 a a b b]
+;    (if (< b a)
+;        ret
+;        (recur (+ ret 1) (+ a 1) (- b 1)))))
+
+;a + b = x で b >= a となる組み合わせ
+(defn count-ways-sum-of-two
+  [a b]
+  (- (int (/ (+ a b)2)) a))
+
+(defn count-ways-sum-of-n-aux
+  [a b n]
+  (cond
+    (and (= n 2) (> a b)) 0
+    (= n 2) (count-ways-sum-of-two a b)
+    (< b 1) 0
+    (< b a) (+ (count-ways-sum-of-n-aux 1 a (- n 1)) 
+               (count-ways-sum-of-n-aux (+ a 1) (- b 1) n))
+    :else (+ (count-ways-sum-of-n-aux (+ 1 (- a b)) b (- n 1))
+             (count-ways-sum-of-n-aux (+ a 1) (- b 1) n))))
+
+;a1 + a2 + ... + an = x となる組み合わせ
+(defn count-ways-sum-of-n
+  [x n]
+  (count-ways-sum-of-n-aux 1 (+ (- x n) 1) n))
+
+(defn p76
+  [x]
+  (loop [ret 0 n 2]
+    (if (> n x)
+        ret
+        (recur (+ ret (count-ways-sum-of-n x n)) (+ n 1)))))
+
+(println (count-ways-sum-of-two 1 99))
+(println (count-ways-sum-of-two  10 90))
+(println (count-ways-sum-of-n 10 5))
+;(println "p76" (p76 100))
